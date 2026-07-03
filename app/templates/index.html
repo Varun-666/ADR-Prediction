@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADR Prediction — Rate Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <div class="desk">
+
+    <!-- ===== Header ===== -->
+    <header class="desk-header">
+      <div class="brand">
+        <span class="brand-mark">ADR</span>
+        <div class="brand-text">
+          <h1>Rate Desk</h1>
+          <p>Average Daily Rate prediction, powered by a trained Random Forest model</p>
+        </div>
+      </div>
+      <div class="brand-stat">
+        <span class="stat-value">R&sup2; 0.868</span>
+        <span class="stat-label">test accuracy</span>
+      </div>
+    </header>
+
+    <!-- ===== Main layout ===== -->
+    <main class="layout">
+
+      <!-- Booking form -->
+      <form id="booking-form" class="ledger" autocomplete="off">
+
+        <section class="ledger-section">
+          <h2><span class="eyebrow">01</span> Stay</h2>
+          <div class="grid grid-2">
+            <label>
+              Hotel
+              <select name="hotel" required>
+                <option value="City Hotel">City Hotel</option>
+                <option value="Resort Hotel">Resort Hotel</option>
+              </select>
+            </label>
+            <label>
+              Reserved room type
+              <select name="reserved_room_type" required></select>
+            </label>
+            <label>
+              Arrival month
+              <select name="arrival_date_month" required></select>
+            </label>
+            <label>
+              Arrival year
+              <input type="number" name="arrival_date_year" value="2026" min="2015" max="2035" required />
+            </label>
+            <label>
+              Arrival day of month
+              <input type="number" name="arrival_date_day_of_month" value="15" min="1" max="31" required />
+            </label>
+            <label>
+              Arrival week number
+              <input type="number" name="arrival_date_week_number" value="24" min="1" max="53" required />
+            </label>
+            <label>
+              Weekend nights
+              <input type="number" name="stays_in_weekend_nights" value="2" min="0" max="20" required />
+            </label>
+            <label>
+              Week nights
+              <input type="number" name="stays_in_week_nights" value="3" min="0" max="40" required />
+            </label>
+            <label>
+              Lead time (days before arrival)
+              <input type="number" name="lead_time" value="45" min="0" max="800" required />
+            </label>
+          </div>
+        </section>
+
+        <section class="ledger-section">
+          <h2><span class="eyebrow">02</span> Guests</h2>
+          <div class="grid grid-3">
+            <label>
+              Adults
+              <input type="number" name="adults" value="2" min="0" max="10" required />
+            </label>
+            <label>
+              Children
+              <input type="number" name="children" value="0" min="0" max="10" required />
+            </label>
+            <label>
+              Babies
+              <input type="number" name="babies" value="0" min="0" max="10" required />
+            </label>
+          </div>
+          <div class="grid grid-2">
+            <label>
+              Meal plan
+              <select name="meal" required></select>
+            </label>
+            <label>
+              Guest country
+              <select name="country" required></select>
+            </label>
+          </div>
+        </section>
+
+        <section class="ledger-section">
+          <h2><span class="eyebrow">03</span> Booking</h2>
+          <div class="grid grid-2">
+            <label>
+              Market segment
+              <select name="market_segment" required></select>
+            </label>
+            <label>
+              Distribution channel
+              <select name="distribution_channel" required></select>
+            </label>
+            <label>
+              Deposit type
+              <select name="deposit_type" required></select>
+            </label>
+            <label>
+              Customer type
+              <select name="customer_type" required></select>
+            </label>
+          </div>
+          <div class="grid grid-3">
+            <label>
+              Booking changes
+              <input type="number" name="booking_changes" value="0" min="0" max="25" required />
+            </label>
+            <label>
+              Days in waiting list
+              <input type="number" name="days_in_waiting_list" value="0" min="0" max="400" required />
+            </label>
+            <label>
+              Parking spaces required
+              <input type="number" name="required_car_parking_spaces" value="0" min="0" max="8" required />
+            </label>
+            <label>
+              Special requests
+              <input type="number" name="total_of_special_requests" value="1" min="0" max="10" required />
+            </label>
+            <label>
+              Repeated guest
+              <select name="is_repeated_guest" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="ledger-section">
+          <h2><span class="eyebrow">04</span> Guest history</h2>
+          <div class="grid grid-2">
+            <label>
+              Previous cancellations
+              <input type="number" name="previous_cancellations" value="0" min="0" max="30" required />
+            </label>
+            <label>
+              Previous bookings not canceled
+              <input type="number" name="previous_bookings_not_canceled" value="0" min="0" max="80" required />
+            </label>
+          </div>
+        </section>
+
+        <button type="submit" id="predict-btn" class="predict-btn">
+          <span>Quote this rate</span>
+        </button>
+      </form>
+
+      <!-- Prediction / key card panel -->
+      <aside class="quote-panel">
+        <div class="key-card" id="key-card">
+          <div class="key-card-hole"></div>
+          <p class="key-card-label">Predicted ADR</p>
+          <p class="key-card-value" id="adr-value">— . — —</p>
+          <p class="key-card-currency">EUR / night</p>
+          <div class="key-card-divider"></div>
+          <div class="key-card-meta" id="key-card-meta">
+            <div><span>Season</span><strong id="meta-season">—</strong></div>
+            <div><span>Guests</span><strong id="meta-guests">—</strong></div>
+            <div><span>Nights</span><strong id="meta-nights">—</strong></div>
+          </div>
+          <div class="key-card-barcode" aria-hidden="true"></div>
+        </div>
+
+        <div class="summary-box" id="summary-box" hidden>
+          <h3>Booking summary</h3>
+          <ul id="summary-list"></ul>
+        </div>
+
+        <p class="quote-note" id="quote-note">Fill in the ledger and press <strong>Quote this rate</strong> to get a live prediction from the trained model.</p>
+      </aside>
+
+    </main>
+
+    <footer class="desk-footer">
+      <p>Random Forest Regressor · trained on the Hotel Booking Demand dataset · deployed via FastAPI + Render</p>
+    </footer>
+  </div>
+
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

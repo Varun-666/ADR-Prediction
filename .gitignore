@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Env files
+.env
+.env.local
+
+# Model artifact — too large for git, downloaded at startup from MODEL_URL
+# (see README.md). Delete this line if you decide to commit the model directly.
+app/model/*.pkl
