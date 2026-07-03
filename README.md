@@ -1,129 +1,316 @@
-# ADR Prediction System
+---
+title: ADR Prediction
+emoji: 🏨
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
 
-Predicts Hotel Average Daily Rate (ADR) from booking details using a trained
-Random Forest Regressor (Test R² = 0.868, MAE = 10.10, RMSE = 18.58).
+# 🏨 ADR Prediction System
 
-## Project structure
+> **A Machine Learning powered web application for predicting Hotel Average Daily Rate (ADR) using historical booking information.**
+
+![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green?logo=fastapi)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Random%20Forest-orange?logo=scikitlearn)
+![Docker](https://img.shields.io/badge/Docker-Deployed-blue?logo=docker)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-Spaces-yellow)
+
+---
+
+## 📌 Project Overview
+
+The **ADR Prediction System** is a Machine Learning web application designed to estimate the **Average Daily Rate (ADR)** of hotel bookings based on reservation details.
+
+The project combines:
+
+- Machine Learning
+- Feature Engineering
+- FastAPI
+- Docker
+- Hugging Face Spaces
+
+to provide a complete end-to-end deployment of an ML model.
+
+Instead of only training a model inside a notebook, this project demonstrates the complete ML lifecycle—from preprocessing and model development to deployment as a production-ready web application.
+
+---
+
+# 🚀 Live Demo
+
+**Hugging Face Space**
+
+👉 **[Add Your Hugging Face Space URL Here]**
+
+---
+
+# 📷 Application Preview
+
+> *(Add screenshots here after deployment)*
+
+### Home Page
 
 ```
-ADR_Prediction/
+Screenshot
+```
+
+### Prediction Result
+
+```
+Screenshot
+```
+
+---
+
+# ✨ Features
+
+- Predict Hotel ADR in real time
+- Responsive Web Interface
+- FastAPI Backend
+- Random Forest Regression Model
+- Automatic Feature Engineering
+- Docker Deployment
+- Hosted on Hugging Face Spaces
+- Interactive Prediction Form
+- Clean User Interface
+
+---
+
+# 🧠 Machine Learning Pipeline
+
+The project follows a complete ML workflow.
+
+```
+Dataset
+      │
+      ▼
+Data Cleaning
+      │
+      ▼
+Exploratory Data Analysis
+      │
+      ▼
+Feature Engineering
+      │
+      ▼
+Data Preprocessing
+      │
+      ▼
+Random Forest Regressor
+      │
+      ▼
+Model Serialization
+      │
+      ▼
+FastAPI Backend
+      │
+      ▼
+Docker
+      │
+      ▼
+Hugging Face Spaces
+```
+
+---
+
+# 📊 Dataset Features
+
+The model predicts ADR using booking information such as:
+
+- Hotel Type
+- Lead Time
+- Arrival Date
+- Meal Plan
+- Country
+- Market Segment
+- Distribution Channel
+- Room Type
+- Deposit Type
+- Customer Type
+- Adults
+- Children
+- Babies
+- Previous Bookings
+- Previous Cancellations
+- Parking Requirement
+- Special Requests
+- Booking Changes
+- Waiting List Days
+
+---
+
+# ⚙️ Feature Engineering
+
+Additional features are generated before prediction.
+
+| Engineered Feature | Description |
+|-------------------|-------------|
+| Total Guests | Adults + Children + Babies |
+| Total Nights | Weekend + Week Nights |
+| Family Booking | Detects family reservations |
+| Customer History | Previous bookings + cancellations |
+| Weekend Stay | Whether booking includes weekend |
+| Long Stay | Stay greater than 5 nights |
+| Season | Derived from arrival month |
+
+These engineered features are recreated during inference to ensure consistency with training.
+
+---
+
+# 🧩 Tech Stack
+
+| Category | Technology |
+|-----------|------------|
+| Language | Python |
+| Backend | FastAPI |
+| Machine Learning | Scikit-Learn |
+| Data Processing | Pandas, NumPy |
+| Model Storage | Joblib |
+| Frontend | HTML, CSS, JavaScript |
+| Deployment | Docker |
+| Hosting | Hugging Face Spaces |
+
+---
+
+# 📁 Project Structure
+
+```
+ADR-Prediction/
+│
 ├── app/
-│   ├── main.py           # FastAPI routes (/, /predict, /health)
-│   ├── predictor.py       # Feature engineering + model inference
-│   ├── schemas.py         # Pydantic request/response models
-│   ├── templates/
-│   │   └── index.html     # Booking form + prediction UI
+│   ├── model/
+│   │   └── ADR_Prediction_Model.pkl
 │   ├── static/
-│   │   ├── css/style.css
-│   │   └── js/script.js
-│   └── model/
-│       └── ADR_Prediction_Model.pkl   # NOT included in this zip — see below
+│   │   ├── css/
+│   │   └── js/
+│   ├── templates/
+│   ├── main.py
+│   ├── predictor.py
+│   └── schemas.py
+│
+├── Dockerfile
 ├── requirements.txt
-├── render.yaml
+├── README.md
 └── .gitignore
 ```
 
-## ⚠️ The model file (461 MB) is not committed to git
+---
 
-`ADR_Prediction_Model.pkl` is too large for a normal GitHub push (100 MB
-limit) and would also blow past GitHub's free **Git LFS** quota (1 GB
-storage / 1 GB bandwidth per month). So instead, the app downloads the
-model at startup from a URL you host it at, and `app/model/*.pkl` is
-gitignored.
+# 🛠 Installation
 
-### 1. Host the model as a GitHub Release asset (free, no quota issues)
-
-GitHub Releases allow files up to 2 GB each and aren't subject to the LFS
-storage/bandwidth quota — completely separate system.
-
-1. On GitHub, go to your repo → **Releases** → **Draft a new release**.
-2. Give it any tag (e.g. `v1.0-model`), then drag `ADR_Prediction_Model.pkl`
-   into the asset upload area.
-3. Publish the release. Right-click the uploaded asset link and copy its
-   URL — it'll look like:
-   ```
-   https://github.com/<you>/<repo>/releases/download/v1.0-model/ADR_Prediction_Model.pkl
-   ```
-
-### 2. Point the app at it
-
-- **Locally:** either drop the `.pkl` straight into `app/model/` (simplest
-  for dev), or set an env var:
-  ```bash
-  export MODEL_URL="https://github.com/<you>/<repo>/releases/download/v1.0-model/ADR_Prediction_Model.pkl"
-  uvicorn app.main:app --reload
-  ```
-- **On Render:** in the service's dashboard under **Environment**, add
-  `MODEL_URL` with that same value (already stubbed in `render.yaml` as
-  `sync: false`, meaning Render will prompt you to fill it in).
-
-On startup, `predictor.py` checks for the file locally first; if it's
-missing, it downloads it from `MODEL_URL` before the first prediction.
-
-### Alternatives, if you'd rather not use GitHub Releases
-
-- **Hugging Face Hub** — free, purpose-built for hosting ML model files,
-  effectively unlimited for public repos.
-- **Shrink the model** — a Random Forest this large usually has more trees
-  or depth than needed. Reducing `n_estimators`/`max_depth` and re-saving
-  with `joblib.dump(model, path, compress=3)` can bring it under 100 MB
-  with little accuracy loss, letting you commit it directly to git.
-
-## Local development
+Clone the repository
 
 ```bash
-cd ADR_Prediction
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+git clone https://github.com/<your-username>/ADR-Prediction.git
+```
+
+Move into the project
+
+```bash
+cd ADR-Prediction
+```
+
+Create virtual environment
+
+```bash
+python -m venv venv
+```
+
+Activate
+
+Windows
+
+```bash
+venv\Scripts\activate
+```
+
+Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+Run
+
+```bash
 uvicorn app.main:app --reload
 ```
 
-Visit `http://127.0.0.1:8000/` for the UI, or `http://127.0.0.1:8000/docs`
-for the interactive API docs.
+Open
 
-## API
-
-### `POST /predict`
-
-Accepts a JSON body of raw booking fields (see `app/schemas.py` for the
-full list and allowed category values) and returns:
-
-```json
-{
-  "predicted_adr": 166.78,
-  "currency_note": "...",
-  "season": "Summer",
-  "total_guests": 3,
-  "total_nights": 5
-}
+```
+http://127.0.0.1:8000
 ```
 
-Feature engineering (`season`, `total_guests`, `total_nights`, `is_family`,
-`customer_history`, `weekend_stay`, `long_stay`) is computed server-side in
-`predictor.py` from the raw fields — the client only ever sends raw booking
-data.
+---
 
-### `GET /health`
+# 📈 Model Information
 
-Liveness check used by `render.yaml`'s `healthCheckPath`.
+**Algorithm**
 
-## Deploying to Render
+- Random Forest Regressor
 
-1. Push this repo to GitHub (see the Git LFS note above).
-2. In Render, create a new **Web Service** from the repo — `render.yaml`
-   will be picked up automatically (Blueprint), or configure manually:
-   - Build command: `pip install -r requirements.txt`
-   - Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-3. Confirm the model file is present in the deployed filesystem before
-   the first request (Render's free tier spins down on idle, so the first
-   request after a cold start will take longer while the model loads).
+The model was trained after preprocessing and feature engineering using a Scikit-Learn pipeline.
 
-## Notes
+Prediction output:
 
-- `requirements.txt` pins `scikit-learn==1.7.2` to match the version the
-  model was trained/pickled with. Unpickling with a different sklearn
-  version works but logs `InconsistentVersionWarning` and carries a small
-  risk of subtly different behavior — keep this pin unless you retrain.
-- ADR values are in the same currency/unit as the original Hotel Booking
-  Demand dataset (EUR).
+```
+Average Daily Rate (ADR)
+```
+
+---
+
+# 🌍 Deployment
+
+The application is containerized using Docker and deployed on Hugging Face Spaces.
+
+Deployment includes:
+
+- FastAPI backend
+- Static frontend
+- Local model loading
+- Docker runtime
+- Git LFS model management
+
+---
+
+# 🔮 Future Improvements
+
+- XGBoost / LightGBM comparison
+- Hyperparameter optimization
+- Explainable AI using SHAP
+- Batch prediction support
+- REST API documentation improvements
+- Prediction confidence intervals
+- User authentication
+- Historical prediction logs
+- Model monitoring dashboard
+
+---
+
+# 👨‍💻 Author
+
+**Varun**
+
+Artificial Intelligence & Machine Learning Student
+
+---
+
+# ⭐ If you like this project
+
+Consider giving the repository a ⭐ on GitHub.
+
+It helps support future development and makes the project easier for others to discover.
+
+---
+
+# 📜 License
+
+This project is licensed under the MIT License.
