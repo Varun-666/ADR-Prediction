@@ -47,7 +47,7 @@ Instead of only training a model inside a notebook, this project demonstrates th
 
 # 📷 Application Preview
 
-> *(Add screenshots here after deployment)*
+> *(Add screenshots here after deployment)
 
 ### Home Page
 
@@ -58,7 +58,8 @@ Screenshot
 ### Prediction Result
 
 ```
-Screenshot
+<img width="1841" height="871" alt="image" src="https://github.com/user-attachments/assets/6a4e1d6a-64f1-474d-885c-f02498459c00" />
+
 ```
 
 ---
