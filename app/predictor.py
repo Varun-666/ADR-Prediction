@@ -28,12 +28,26 @@ MODEL_PATH = Path(__file__).parent / "model" / "ADR_Prediction_Model.pkl"
 MODEL_URL = os.environ.get("MODEL_URL", "")
 
 
+# def _download_model():
+#     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+#     print(f"Model not found locally. Downloading from MODEL_URL to {MODEL_PATH} ...")
+#     tmp_path = MODEL_PATH.with_suffix(".pkl.tmp")
+#     urllib.request.urlretrieve(MODEL_URL, tmp_path)
+#     tmp_path.rename(MODEL_PATH)
+#     print("Model download complete.")
+
 def _download_model():
+    print("=" * 80)
+    print(f"MODEL_URL: {MODEL_URL}")
+    print("=" * 80)
+
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     print(f"Model not found locally. Downloading from MODEL_URL to {MODEL_PATH} ...")
+
     tmp_path = MODEL_PATH.with_suffix(".pkl.tmp")
     urllib.request.urlretrieve(MODEL_URL, tmp_path)
     tmp_path.rename(MODEL_PATH)
+
     print("Model download complete.")
 
 # Month -> season, matching the mapping used in the training notebook.
