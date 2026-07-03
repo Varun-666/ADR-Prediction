@@ -41,7 +41,7 @@ Instead of only training a model inside a notebook, this project demonstrates th
 
 **Hugging Face Space**
 
-👉 **[Add Your Hugging Face Space URL Here]**
+👉 **[https://huggingface.co/spaces/Varun-666/ADR-Prediction]**
 
 ---
 
